@@ -3,16 +3,16 @@
 namespace Trophy\Metrics\Requests;
 
 use Trophy\Core\Json\JsonSerializableType;
-use Trophy\Types\EventRequestUser;
+use Trophy\Types\UpsertedUser;
 use Trophy\Core\Json\JsonProperty;
 
 class MetricsEventRequest extends JsonSerializableType
 {
     /**
-     * @var EventRequestUser $user The user that triggered the event.
+     * @var UpsertedUser $user The user that triggered the event.
      */
     #[JsonProperty('user')]
-    public EventRequestUser $user;
+    public UpsertedUser $user;
 
     /**
      * @var float $value The value to add to the user's current total for the given metric.
@@ -22,7 +22,7 @@ class MetricsEventRequest extends JsonSerializableType
 
     /**
      * @param array{
-     *   user: EventRequestUser,
+     *   user: UpsertedUser,
      *   value: float,
      * } $values
      */

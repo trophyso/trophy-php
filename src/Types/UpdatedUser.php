@@ -6,18 +6,12 @@ use Trophy\Core\Json\JsonSerializableType;
 use Trophy\Core\Json\JsonProperty;
 
 /**
- * The user that triggered the event.
+ * An object with editable user fields.
  */
-class EventRequestUser extends JsonSerializableType
+class UpdatedUser extends JsonSerializableType
 {
     /**
-     * @var string $id The ID of the user in your database. Must be a string.
-     */
-    #[JsonProperty('id')]
-    public string $id;
-
-    /**
-     * @var ?string $email The user's email address.
+     * @var ?string $email The user's email address. Required if subscribeToEmails is true.
      */
     #[JsonProperty('email')]
     public ?string $email;
@@ -35,20 +29,26 @@ class EventRequestUser extends JsonSerializableType
     public ?string $tz;
 
     /**
+     * @var ?bool $subscribeToEmails Whether the user should receive Trophy-powered emails. Cannot be false if an email is provided.
+     */
+    #[JsonProperty('subscribeToEmails')]
+    public ?bool $subscribeToEmails;
+
+    /**
      * @param array{
-     *   id: string,
      *   email?: ?string,
      *   name?: ?string,
      *   tz?: ?string,
+     *   subscribeToEmails?: ?bool,
      * } $values
      */
     public function __construct(
-        array $values,
+        array $values = [],
     ) {
-        $this->id = $values['id'];
         $this->email = $values['email'] ?? null;
         $this->name = $values['name'] ?? null;
         $this->tz = $values['tz'] ?? null;
+        $this->subscribeToEmails = $values['subscribeToEmails'] ?? null;
     }
 
     /**

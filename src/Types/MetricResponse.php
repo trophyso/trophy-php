@@ -57,10 +57,10 @@ class MetricResponse extends JsonSerializableType
     public array $achievements;
 
     /**
-     * @var ?StreakResponse $streak The user's current streak for the metric, if the metric has streaks enabled.
+     * @var ?StreakResponse $currentStreak The user's current streak for the metric, if the metric has streaks enabled.
      */
-    #[JsonProperty('streak')]
-    public ?StreakResponse $streak;
+    #[JsonProperty('currentStreak')]
+    public ?StreakResponse $currentStreak;
 
     /**
      * @param array{
@@ -72,7 +72,7 @@ class MetricResponse extends JsonSerializableType
      *   status: value-of<MetricStatus>,
      *   current: float,
      *   achievements: array<AchievementResponse>,
-     *   streak?: ?StreakResponse,
+     *   currentStreak?: ?StreakResponse,
      * } $values
      */
     public function __construct(
@@ -86,7 +86,7 @@ class MetricResponse extends JsonSerializableType
         $this->status = $values['status'];
         $this->current = $values['current'];
         $this->achievements = $values['achievements'];
-        $this->streak = $values['streak'] ?? null;
+        $this->currentStreak = $values['currentStreak'] ?? null;
     }
 
     /**

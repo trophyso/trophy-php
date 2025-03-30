@@ -3,20 +3,20 @@
 namespace Trophy\Achievements\Requests;
 
 use Trophy\Core\Json\JsonSerializableType;
-use Trophy\Types\EventRequestUser;
+use Trophy\Types\UpsertedUser;
 use Trophy\Core\Json\JsonProperty;
 
 class AchievementsCompleteRequest extends JsonSerializableType
 {
     /**
-     * @var EventRequestUser $user The user that completed the achievement.
+     * @var UpsertedUser $user The user that completed the achievement.
      */
     #[JsonProperty('user')]
-    public EventRequestUser $user;
+    public UpsertedUser $user;
 
     /**
      * @param array{
-     *   user: EventRequestUser,
+     *   user: UpsertedUser,
      * } $values
      */
     public function __construct(
