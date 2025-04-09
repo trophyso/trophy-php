@@ -17,7 +17,7 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Trophy\Types\UpdatedUser;
 use Trophy\Types\MetricResponse;
 use Trophy\Core\Json\JsonDecoder;
-use Trophy\Types\AchievementResponse;
+use Trophy\Types\MultiStageAchievementResponse;
 
 class UsersClient
 {
@@ -54,7 +54,7 @@ class UsersClient
     }
 
     /**
-     * Create a new user.
+     * Identify a new user.
      *
      * @param UpsertedUser $request
      * @param ?array{
@@ -320,7 +320,7 @@ class UsersClient
      *   baseUrl?: string,
      *   maxRetries?: int,
      * } $options
-     * @return array<AchievementResponse>
+     * @return array<MultiStageAchievementResponse>
      * @throws TrophyException
      * @throws TrophyApiException
      */
@@ -339,7 +339,7 @@ class UsersClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return JsonDecoder::decodeArray($json, [AchievementResponse::class]); // @phpstan-ignore-line
+                return JsonDecoder::decodeArray($json, [MultiStageAchievementResponse::class]); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
             throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

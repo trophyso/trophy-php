@@ -15,15 +15,15 @@ class EventResponseMetricsItem extends JsonSerializableType
     public ?string $metricId;
 
     /**
-     * @var ?array<AchievementResponse> $completed A list of any new achievements that the user has now completed as a result of this event being submitted.
+     * @var ?array<MultiStageAchievementResponse> $completed A list of any new achievements that the user has now completed as a result of this event being submitted.
      */
-    #[JsonProperty('completed'), ArrayType([AchievementResponse::class])]
+    #[JsonProperty('completed'), ArrayType([MultiStageAchievementResponse::class])]
     public ?array $completed;
 
     /**
      * @param array{
      *   metricId?: ?string,
-     *   completed?: ?array<AchievementResponse>,
+     *   completed?: ?array<MultiStageAchievementResponse>,
      * } $values
      */
     public function __construct(

@@ -51,9 +51,9 @@ class MetricResponse extends JsonSerializableType
     public float $current;
 
     /**
-     * @var array<AchievementResponse> $achievements A list of the metric's achievements and the user's progress towards each.
+     * @var array<MultiStageAchievementResponse> $achievements A list of the metric's achievements and the user's progress towards each.
      */
-    #[JsonProperty('achievements'), ArrayType([AchievementResponse::class])]
+    #[JsonProperty('achievements'), ArrayType([MultiStageAchievementResponse::class])]
     public array $achievements;
 
     /**
@@ -71,7 +71,7 @@ class MetricResponse extends JsonSerializableType
      *   streakFrequency: value-of<StreakFrequency>,
      *   status: value-of<MetricStatus>,
      *   current: float,
-     *   achievements: array<AchievementResponse>,
+     *   achievements: array<MultiStageAchievementResponse>,
      *   currentStreak?: ?StreakResponse,
      * } $values
      */

@@ -7,7 +7,7 @@ use Trophy\Core\Json\JsonProperty;
 use DateTime;
 use Trophy\Core\Types\Date;
 
-class AchievementResponse extends JsonSerializableType
+class MultiStageAchievementResponse extends JsonSerializableType
 {
     /**
      * @var string $id The unique ID of the achievement.
