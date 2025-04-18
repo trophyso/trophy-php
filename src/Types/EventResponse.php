@@ -33,10 +33,10 @@ class EventResponse extends JsonSerializableType
     public ?array $achievements;
 
     /**
-     * @var ?StreakResponse $currentStreak The user's current streak for the metric, if the metric has streaks enabled.
+     * @var ?IncrementMetricStreakResponse $currentStreak The user's current streak for the metric, if the metric has streaks enabled.
      */
     #[JsonProperty('currentStreak')]
-    public ?StreakResponse $currentStreak;
+    public ?IncrementMetricStreakResponse $currentStreak;
 
     /**
      * @param array{
@@ -44,7 +44,7 @@ class EventResponse extends JsonSerializableType
      *   metricId: string,
      *   total: float,
      *   achievements?: ?array<EventResponseMetricsItem>,
-     *   currentStreak?: ?StreakResponse,
+     *   currentStreak?: ?IncrementMetricStreakResponse,
      * } $values
      */
     public function __construct(

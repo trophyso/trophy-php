@@ -5,24 +5,23 @@ namespace Trophy\Types;
 use Trophy\Core\Json\JsonSerializableType;
 use Trophy\Traits\BaseStreakResponse;
 use Trophy\Core\Json\JsonProperty;
-use Trophy\Core\Types\ArrayType;
 
 /**
- * An object representing the user's streak.
+ * An object representing the user's streak after incrementing a metric.
  */
-class StreakResponse extends JsonSerializableType
+class IncrementMetricStreakResponse extends JsonSerializableType
 {
     use BaseStreakResponse;
 
     /**
-     * @var ?array<StreakResponseStreakHistoryItem> $streakHistory A list of the user's past streak periods up through the current period. Each period includes the start and end dates and the length of the streak.
+     * @var ?bool $extended Whether this metric event increased the user's streak length.
      */
-    #[JsonProperty('streakHistory'), ArrayType([StreakResponseStreakHistoryItem::class])]
-    public ?array $streakHistory;
+    #[JsonProperty('extended')]
+    public ?bool $extended;
 
     /**
      * @param array{
-     *   streakHistory?: ?array<StreakResponseStreakHistoryItem>,
+     *   extended?: ?bool,
      *   length: int,
      *   frequency: value-of<StreakFrequency>,
      *   started?: ?string,
@@ -34,7 +33,7 @@ class StreakResponse extends JsonSerializableType
     public function __construct(
         array $values,
     ) {
-        $this->streakHistory = $values['streakHistory'] ?? null;
+        $this->extended = $values['extended'] ?? null;
         $this->length = $values['length'];
         $this->frequency = $values['frequency'];
         $this->started = $values['started'] ?? null;

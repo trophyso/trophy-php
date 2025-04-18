@@ -18,6 +18,8 @@ use Trophy\Types\UpdatedUser;
 use Trophy\Types\MetricResponse;
 use Trophy\Core\Json\JsonDecoder;
 use Trophy\Types\MultiStageAchievementResponse;
+use Trophy\Users\Requests\UsersStreakRequest;
+use Trophy\Types\StreakResponse;
 
 class UsersClient
 {
@@ -340,6 +342,63 @@ class UsersClient
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
                 return JsonDecoder::decodeArray($json, [MultiStageAchievementResponse::class]); // @phpstan-ignore-line
+            }
+        } catch (JsonException $e) {
+            throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new TrophyException(message: $e->getMessage(), previous: $e);
+            }
+            throw new TrophyApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new TrophyException(message: $e->getMessage(), previous: $e);
+        }
+        throw new TrophyApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Get a user's streak data.
+     *
+     * @param string $id ID of the user.
+     * @param UsersStreakRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     * } $options
+     * @return StreakResponse
+     * @throws TrophyException
+     * @throws TrophyApiException
+     */
+    public function streak(string $id, UsersStreakRequest $request, ?array $options = null): StreakResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->historyPeriods != null) {
+            $query['historyPeriods'] = $request->historyPeriods;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "users/$id/streak",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return StreakResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
