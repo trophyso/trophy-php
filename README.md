@@ -13,7 +13,7 @@ You can install the bindings via [Composer](http://getcomposer.org/). Run the fo
 composer require trophyso/php
 ```
 
-To use the bindings, use the Composer's 
+To use the bindings, use the Composer's
 [autoload](https://getcomposer.org/doc/01-basic-usage.md#autoloading):
 
 ```php
@@ -55,5 +55,5 @@ $trophy->metrics->event("words-written", $request);
 
 ## Documentation
 
-See the [Trophy API Docs](https://trophy.docs.buildwithfern.com/overview/introduction) for more
+See the [Trophy API Docs](https://docs.trophy.so) for more
 information on the accessible endpoints.
