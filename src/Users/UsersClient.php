@@ -226,7 +226,7 @@ class UsersClient
      * @throws TrophyException
      * @throws TrophyApiException
      */
-    public function allmetrics(string $id, ?array $options = null): array
+    public function allMetrics(string $id, ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -278,7 +278,7 @@ class UsersClient
      * @throws TrophyException
      * @throws TrophyApiException
      */
-    public function singlemetric(string $id, string $key, ?array $options = null): MetricResponse
+    public function singleMetric(string $id, string $key, ?array $options = null): MetricResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
@@ -329,7 +329,7 @@ class UsersClient
      * @throws TrophyException
      * @throws TrophyApiException
      */
-    public function allachievements(string $id, ?array $options = null): array
+    public function allAchievements(string $id, ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         try {
