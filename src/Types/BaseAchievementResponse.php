@@ -7,7 +7,7 @@ use Trophy\Core\Json\JsonProperty;
 use DateTime;
 use Trophy\Core\Types\Date;
 
-class MultiStageAchievementResponse extends JsonSerializableType
+class BaseAchievementResponse extends JsonSerializableType
 {
     /**
      * @var string $id The unique ID of the achievement.
@@ -16,34 +16,16 @@ class MultiStageAchievementResponse extends JsonSerializableType
     public string $id;
 
     /**
-     * @var ?string $name The name of this achievement.
+     * @var string $name The name of this achievement.
      */
     #[JsonProperty('name')]
-    public ?string $name;
+    public string $name;
 
     /**
      * @var ?string $badgeUrl The URL of the badge image for the achievement, if one has been uploaded.
      */
     #[JsonProperty('badgeUrl')]
     public ?string $badgeUrl;
-
-    /**
-     * @var ?string $metricId The ID of the metric associated with this achievement, if any.
-     */
-    #[JsonProperty('metricId')]
-    public ?string $metricId;
-
-    /**
-     * @var ?float $metricValue The value of the metric required to complete the achievement, if this achievement is associated with a metric.
-     */
-    #[JsonProperty('metricValue')]
-    public ?float $metricValue;
-
-    /**
-     * @var ?string $metricName The name of the metric associated with this achievement, if any.
-     */
-    #[JsonProperty('metricName')]
-    public ?string $metricName;
 
     /**
      * @var ?string $key The key used to reference this achievement in the API.
@@ -60,11 +42,8 @@ class MultiStageAchievementResponse extends JsonSerializableType
     /**
      * @param array{
      *   id: string,
-     *   name?: ?string,
+     *   name: string,
      *   badgeUrl?: ?string,
-     *   metricId?: ?string,
-     *   metricValue?: ?float,
-     *   metricName?: ?string,
      *   key?: ?string,
      *   achievedAt?: ?DateTime,
      * } $values
@@ -73,11 +52,8 @@ class MultiStageAchievementResponse extends JsonSerializableType
         array $values,
     ) {
         $this->id = $values['id'];
-        $this->name = $values['name'] ?? null;
+        $this->name = $values['name'];
         $this->badgeUrl = $values['badgeUrl'] ?? null;
-        $this->metricId = $values['metricId'] ?? null;
-        $this->metricValue = $values['metricValue'] ?? null;
-        $this->metricName = $values['metricName'] ?? null;
         $this->key = $values['key'] ?? null;
         $this->achievedAt = $values['achievedAt'] ?? null;
     }
