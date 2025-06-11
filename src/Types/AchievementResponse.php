@@ -22,6 +22,12 @@ class AchievementResponse extends JsonSerializableType
     public string $name;
 
     /**
+     * @var string $trigger The trigger of the achievement, either 'metric', 'streak', or 'api'.
+     */
+    #[JsonProperty('trigger')]
+    public string $trigger;
+
+    /**
      * @var ?string $badgeUrl The URL of the badge image for the achievement, if one has been uploaded.
      */
     #[JsonProperty('badgeUrl')]
@@ -67,6 +73,7 @@ class AchievementResponse extends JsonSerializableType
      * @param array{
      *   id: string,
      *   name: string,
+     *   trigger: string,
      *   badgeUrl?: ?string,
      *   achievedAt?: ?DateTime,
      *   key?: ?string,
@@ -81,6 +88,7 @@ class AchievementResponse extends JsonSerializableType
     ) {
         $this->id = $values['id'];
         $this->name = $values['name'];
+        $this->trigger = $values['trigger'];
         $this->badgeUrl = $values['badgeUrl'] ?? null;
         $this->achievedAt = $values['achievedAt'] ?? null;
         $this->key = $values['key'] ?? null;
