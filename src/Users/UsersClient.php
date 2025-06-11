@@ -17,10 +17,7 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Trophy\Types\UpdatedUser;
 use Trophy\Types\MetricResponse;
 use Trophy\Core\Json\JsonDecoder;
-use Trophy\Types\MetricAchievementResponse;
-use Trophy\Types\StreakAchievementResponse;
-use Trophy\Types\ApiAchievementResponse;
-use Trophy\Core\Types\Union;
+use Trophy\Types\AchievementResponse;
 use Trophy\Users\Requests\UsersStreakRequest;
 use Trophy\Types\StreakResponse;
 
@@ -325,7 +322,7 @@ class UsersClient
      *   baseUrl?: string,
      *   maxRetries?: int,
      * } $options
-     * @return array<MetricAchievementResponse|StreakAchievementResponse|ApiAchievementResponse>
+     * @return array<AchievementResponse>
      * @throws TrophyException
      * @throws TrophyApiException
      */
@@ -344,7 +341,7 @@ class UsersClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return JsonDecoder::decodeArray($json, [new Union(MetricAchievementResponse::class, StreakAchievementResponse::class, ApiAchievementResponse::class)]); // @phpstan-ignore-line
+                return JsonDecoder::decodeArray($json, [AchievementResponse::class]); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
             throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

@@ -14,15 +14,15 @@ class AchievementCompletionResponse extends JsonSerializableType
     public string $completionId;
 
     /**
-     * @var ApiAchievementResponse $achievement
+     * @var AchievementResponse $achievement
      */
     #[JsonProperty('achievement')]
-    public ApiAchievementResponse $achievement;
+    public AchievementResponse $achievement;
 
     /**
      * @param array{
      *   completionId: string,
-     *   achievement: ApiAchievementResponse,
+     *   achievement: AchievementResponse,
      * } $values
      */
     public function __construct(

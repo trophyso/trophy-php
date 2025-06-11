@@ -39,9 +39,9 @@ class MetricResponse extends JsonSerializableType
     public float $current;
 
     /**
-     * @var array<MetricAchievementResponse> $achievements A list of the metric's achievements and the user's progress towards each.
+     * @var array<AchievementResponse> $achievements A list of the metric's achievements and the user's progress towards each.
      */
-    #[JsonProperty('achievements'), ArrayType([MetricAchievementResponse::class])]
+    #[JsonProperty('achievements'), ArrayType([AchievementResponse::class])]
     public array $achievements;
 
     /**
@@ -51,7 +51,7 @@ class MetricResponse extends JsonSerializableType
      *   name: string,
      *   status: value-of<MetricStatus>,
      *   current: float,
-     *   achievements: array<MetricAchievementResponse>,
+     *   achievements: array<AchievementResponse>,
      * } $values
      */
     public function __construct(

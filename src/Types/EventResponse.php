@@ -27,9 +27,9 @@ class EventResponse extends JsonSerializableType
     public float $total;
 
     /**
-     * @var ?array<EventResponseMetricsItem> $achievements Changes to achievements as a result of this event.
+     * @var ?array<AchievementResponse> $achievements Achievements completed as a result of this event.
      */
-    #[JsonProperty('achievements'), ArrayType([EventResponseMetricsItem::class])]
+    #[JsonProperty('achievements'), ArrayType([AchievementResponse::class])]
     public ?array $achievements;
 
     /**
@@ -43,7 +43,7 @@ class EventResponse extends JsonSerializableType
      *   eventId: string,
      *   metricId: string,
      *   total: float,
-     *   achievements?: ?array<EventResponseMetricsItem>,
+     *   achievements?: ?array<AchievementResponse>,
      *   currentStreak?: ?IncrementMetricStreakResponse,
      * } $values
      */
