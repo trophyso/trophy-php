@@ -17,7 +17,9 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Trophy\Types\UpdatedUser;
 use Trophy\Types\MetricResponse;
 use Trophy\Core\Json\JsonDecoder;
-use Trophy\Types\AchievementResponse;
+use Trophy\Users\Requests\UsersMetricEventSummaryRequest;
+use Trophy\Users\Types\UsersMetricEventSummaryResponseItem;
+use Trophy\Types\CompletedAchievementResponse;
 use Trophy\Users\Requests\UsersStreakRequest;
 use Trophy\Types\StreakResponse;
 
@@ -315,6 +317,64 @@ class UsersClient
     }
 
     /**
+     * Get a summary of metric events over time for a user.
+     *
+     * @param string $id ID of the user.
+     * @param string $key Unique key of the metric.
+     * @param UsersMetricEventSummaryRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     * } $options
+     * @return array<UsersMetricEventSummaryResponseItem>
+     * @throws TrophyException
+     * @throws TrophyApiException
+     */
+    public function metricEventSummary(string $id, string $key, UsersMetricEventSummaryRequest $request, ?array $options = null): array
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        $query['aggregation'] = $request->aggregation;
+        $query['startDate'] = $request->startDate;
+        $query['endDate'] = $request->endDate;
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "users/$id/metrics/$key/event-summary",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return JsonDecoder::decodeArray($json, [UsersMetricEventSummaryResponseItem::class]); // @phpstan-ignore-line
+            }
+        } catch (JsonException $e) {
+            throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new TrophyException(message: $e->getMessage(), previous: $e);
+            }
+            throw new TrophyApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new TrophyException(message: $e->getMessage(), previous: $e);
+        }
+        throw new TrophyApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
      * Get all of a user's completed achievements.
      *
      * @param string $id ID of the user.
@@ -322,7 +382,7 @@ class UsersClient
      *   baseUrl?: string,
      *   maxRetries?: int,
      * } $options
-     * @return array<AchievementResponse>
+     * @return array<CompletedAchievementResponse>
      * @throws TrophyException
      * @throws TrophyApiException
      */
@@ -341,7 +401,7 @@ class UsersClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return JsonDecoder::decodeArray($json, [AchievementResponse::class]); // @phpstan-ignore-line
+                return JsonDecoder::decodeArray($json, [CompletedAchievementResponse::class]); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
             throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

@@ -1,11 +1,10 @@
 <?php
 
-namespace Trophy\Types;
+namespace Trophy\Traits;
 
-use Trophy\Core\Json\JsonSerializableType;
 use Trophy\Core\Json\JsonProperty;
 
-class AchievementResponse extends JsonSerializableType
+trait AchievementResponse
 {
     /**
      * @var string $id The unique ID of the achievement.
@@ -66,41 +65,4 @@ class AchievementResponse extends JsonSerializableType
      */
     #[JsonProperty('metricName')]
     public ?string $metricName;
-
-    /**
-     * @param array{
-     *   id: string,
-     *   name: string,
-     *   trigger: string,
-     *   description?: ?string,
-     *   badgeUrl?: ?string,
-     *   key?: ?string,
-     *   streakLength?: ?int,
-     *   metricId?: ?string,
-     *   metricValue?: ?float,
-     *   metricName?: ?string,
-     * } $values
-     */
-    public function __construct(
-        array $values,
-    ) {
-        $this->id = $values['id'];
-        $this->name = $values['name'];
-        $this->trigger = $values['trigger'];
-        $this->description = $values['description'] ?? null;
-        $this->badgeUrl = $values['badgeUrl'] ?? null;
-        $this->key = $values['key'] ?? null;
-        $this->streakLength = $values['streakLength'] ?? null;
-        $this->metricId = $values['metricId'] ?? null;
-        $this->metricValue = $values['metricValue'] ?? null;
-        $this->metricName = $values['metricName'] ?? null;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return $this->toJson();
-    }
 }
