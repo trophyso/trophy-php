@@ -20,7 +20,7 @@ class AchievementResponse extends JsonSerializableType
     public string $name;
 
     /**
-     * @var string $trigger The trigger of the achievement, either 'metric', 'streak', or 'api'.
+     * @var value-of<AchievementResponseTrigger> $trigger The trigger of the achievement.
      */
     #[JsonProperty('trigger')]
     public string $trigger;
@@ -68,10 +68,16 @@ class AchievementResponse extends JsonSerializableType
     public ?string $metricName;
 
     /**
+     * @var ?MetricEventStreakResponse $currentStreak The user's current streak for the metric, if the metric has streaks enabled.
+     */
+    #[JsonProperty('currentStreak')]
+    public ?MetricEventStreakResponse $currentStreak;
+
+    /**
      * @param array{
      *   id: string,
      *   name: string,
-     *   trigger: string,
+     *   trigger: value-of<AchievementResponseTrigger>,
      *   description?: ?string,
      *   badgeUrl?: ?string,
      *   key?: ?string,
@@ -79,6 +85,7 @@ class AchievementResponse extends JsonSerializableType
      *   metricId?: ?string,
      *   metricValue?: ?float,
      *   metricName?: ?string,
+     *   currentStreak?: ?MetricEventStreakResponse,
      * } $values
      */
     public function __construct(
@@ -94,6 +101,7 @@ class AchievementResponse extends JsonSerializableType
         $this->metricId = $values['metricId'] ?? null;
         $this->metricValue = $values['metricValue'] ?? null;
         $this->metricName = $values['metricName'] ?? null;
+        $this->currentStreak = $values['currentStreak'] ?? null;
     }
 
     /**

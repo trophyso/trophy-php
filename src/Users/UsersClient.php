@@ -22,6 +22,10 @@ use Trophy\Users\Types\UsersMetricEventSummaryResponseItem;
 use Trophy\Types\CompletedAchievementResponse;
 use Trophy\Users\Requests\UsersStreakRequest;
 use Trophy\Types\StreakResponse;
+use Trophy\Users\Requests\UsersPointsRequest;
+use Trophy\Types\GetUserPointsResponse;
+use Trophy\Users\Requests\UsersPointsEventSummaryRequest;
+use Trophy\Users\Types\UsersPointsEventSummaryResponseItem;
 
 class UsersClient
 {
@@ -459,6 +463,120 @@ class UsersClient
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
                 return StreakResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new TrophyException(message: $e->getMessage(), previous: $e);
+            }
+            throw new TrophyApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new TrophyException(message: $e->getMessage(), previous: $e);
+        }
+        throw new TrophyApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Get a user's points.
+     *
+     * @param string $id ID of the user.
+     * @param UsersPointsRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     * } $options
+     * @return GetUserPointsResponse
+     * @throws TrophyException
+     * @throws TrophyApiException
+     */
+    public function points(string $id, UsersPointsRequest $request, ?array $options = null): GetUserPointsResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->awards != null) {
+            $query['awards'] = $request->awards;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "users/$id/points",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return GetUserPointsResponse::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new TrophyException(message: $e->getMessage(), previous: $e);
+            }
+            throw new TrophyApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new TrophyException(message: $e->getMessage(), previous: $e);
+        }
+        throw new TrophyApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Get a summary of points awards over time for a user.
+     *
+     * @param string $id ID of the user.
+     * @param UsersPointsEventSummaryRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     * } $options
+     * @return array<UsersPointsEventSummaryResponseItem>
+     * @throws TrophyException
+     * @throws TrophyApiException
+     */
+    public function pointsEventSummary(string $id, UsersPointsEventSummaryRequest $request, ?array $options = null): array
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        $query['aggregation'] = $request->aggregation;
+        $query['startDate'] = $request->startDate;
+        $query['endDate'] = $request->endDate;
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "users/$id/points/event-summary",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return JsonDecoder::decodeArray($json, [UsersPointsEventSummaryResponseItem::class]); // @phpstan-ignore-line
             }
         } catch (JsonException $e) {
             throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

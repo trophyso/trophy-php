@@ -3,6 +3,8 @@
 namespace Trophy\Traits;
 
 use Trophy\Core\Json\JsonProperty;
+use Trophy\Types\AchievementResponseTrigger;
+use Trophy\Types\MetricEventStreakResponse;
 
 trait AchievementResponse
 {
@@ -19,7 +21,7 @@ trait AchievementResponse
     public string $name;
 
     /**
-     * @var string $trigger The trigger of the achievement, either 'metric', 'streak', or 'api'.
+     * @var value-of<AchievementResponseTrigger> $trigger The trigger of the achievement.
      */
     #[JsonProperty('trigger')]
     public string $trigger;
@@ -65,4 +67,10 @@ trait AchievementResponse
      */
     #[JsonProperty('metricName')]
     public ?string $metricName;
+
+    /**
+     * @var ?MetricEventStreakResponse $currentStreak The user's current streak for the metric, if the metric has streaks enabled.
+     */
+    #[JsonProperty('currentStreak')]
+    public ?MetricEventStreakResponse $currentStreak;
 }

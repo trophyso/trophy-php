@@ -7,9 +7,9 @@ use Trophy\Traits\BaseStreakResponse;
 use Trophy\Core\Json\JsonProperty;
 
 /**
- * An object representing the user's streak after incrementing a metric.
+ * An object representing the user's streak after sending a metric event.
  */
-class IncrementMetricStreakResponse extends JsonSerializableType
+class MetricEventStreakResponse extends JsonSerializableType
 {
     use BaseStreakResponse;
 

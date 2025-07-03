@@ -23,7 +23,7 @@ class CompletedAchievementResponse extends JsonSerializableType
      *   achievedAt?: ?DateTime,
      *   id: string,
      *   name: string,
-     *   trigger: string,
+     *   trigger: value-of<AchievementResponseTrigger>,
      *   description?: ?string,
      *   badgeUrl?: ?string,
      *   key?: ?string,
@@ -31,6 +31,7 @@ class CompletedAchievementResponse extends JsonSerializableType
      *   metricId?: ?string,
      *   metricValue?: ?float,
      *   metricName?: ?string,
+     *   currentStreak?: ?MetricEventStreakResponse,
      * } $values
      */
     public function __construct(
@@ -47,6 +48,7 @@ class CompletedAchievementResponse extends JsonSerializableType
         $this->metricId = $values['metricId'] ?? null;
         $this->metricValue = $values['metricValue'] ?? null;
         $this->metricName = $values['metricName'] ?? null;
+        $this->currentStreak = $values['currentStreak'] ?? null;
     }
 
     /**
