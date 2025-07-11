@@ -20,6 +20,18 @@ class PointsAward extends JsonSerializableType
     public ?float $awarded;
 
     /**
+     * @var ?string $date The date these points were awarded, in ISO 8601 format.
+     */
+    #[JsonProperty('date')]
+    public ?string $date;
+
+    /**
+     * @var ?float $total The user's total points after this award occurred.
+     */
+    #[JsonProperty('total')]
+    public ?float $total;
+
+    /**
      * @var ?PointsTrigger $trigger
      */
     #[JsonProperty('trigger')]
@@ -29,6 +41,8 @@ class PointsAward extends JsonSerializableType
      * @param array{
      *   id?: ?string,
      *   awarded?: ?float,
+     *   date?: ?string,
+     *   total?: ?float,
      *   trigger?: ?PointsTrigger,
      * } $values
      */
@@ -37,6 +51,8 @@ class PointsAward extends JsonSerializableType
     ) {
         $this->id = $values['id'] ?? null;
         $this->awarded = $values['awarded'] ?? null;
+        $this->date = $values['date'] ?? null;
+        $this->total = $values['total'] ?? null;
         $this->trigger = $values['trigger'] ?? null;
     }
 
