@@ -165,6 +165,59 @@ class UsersClient
     }
 
     /**
+     * Upsert a user (create or update).
+     *
+     * @param string $id ID of the user to upsert.
+     * @param UpdatedUser $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     * } $options
+     * @return User
+     * @throws TrophyException
+     * @throws TrophyApiException
+     */
+    public function upsert(string $id, UpdatedUser $request, ?array $options = null): User
+    {
+        $options = array_merge($this->options, $options ?? []);
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "users/$id",
+                    method: HttpMethod::PUT,
+                    body: $request,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return User::fromJson($json);
+            }
+        } catch (JsonException $e) {
+            throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new TrophyException(message: $e->getMessage(), previous: $e);
+            }
+            throw new TrophyApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new TrophyException(message: $e->getMessage(), previous: $e);
+        }
+        throw new TrophyApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
      * Update a user.
      *
      * @param string $id ID of the user to update.
