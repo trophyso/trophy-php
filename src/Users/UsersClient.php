@@ -62,7 +62,7 @@ class UsersClient
     }
 
     /**
-     * Identify a new user.
+     * Create a new user.
      *
      * @param UpsertedUser $request
      * @param ?array{
@@ -165,9 +165,9 @@ class UsersClient
     }
 
     /**
-     * Upsert a user (create or update).
+     * Identify a user.
      *
-     * @param string $id ID of the user to upsert.
+     * @param string $id ID of the user to identify.
      * @param UpdatedUser $request
      * @param ?array{
      *   baseUrl?: string,
@@ -177,7 +177,7 @@ class UsersClient
      * @throws TrophyException
      * @throws TrophyApiException
      */
-    public function upsert(string $id, UpdatedUser $request, ?array $options = null): User
+    public function identify(string $id, UpdatedUser $request, ?array $options = null): User
     {
         $options = array_merge($this->options, $options ?? []);
         try {
