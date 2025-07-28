@@ -25,6 +25,7 @@ class UpsertedUser extends JsonSerializableType
      *   email?: ?string,
      *   name?: ?string,
      *   tz?: ?string,
+     *   deviceTokens?: ?array<string>,
      *   subscribeToEmails?: ?bool,
      * } $values
      */
@@ -35,6 +36,7 @@ class UpsertedUser extends JsonSerializableType
         $this->email = $values['email'] ?? null;
         $this->name = $values['name'] ?? null;
         $this->tz = $values['tz'] ?? null;
+        $this->deviceTokens = $values['deviceTokens'] ?? null;
         $this->subscribeToEmails = $values['subscribeToEmails'] ?? null;
     }
 

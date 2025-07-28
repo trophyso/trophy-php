@@ -3,6 +3,7 @@
 namespace Trophy\Traits;
 
 use Trophy\Core\Json\JsonProperty;
+use Trophy\Core\Types\ArrayType;
 
 /**
  * An object with editable user fields.
@@ -26,6 +27,12 @@ trait UpdatedUser
      */
     #[JsonProperty('tz')]
     public ?string $tz;
+
+    /**
+     * @var ?array<string> $deviceTokens The user's device tokens, used for push notifications.
+     */
+    #[JsonProperty('deviceTokens'), ArrayType(['string'])]
+    public ?array $deviceTokens;
 
     /**
      * @var ?bool $subscribeToEmails Whether the user should receive Trophy-powered emails. Cannot be false if an email is provided.

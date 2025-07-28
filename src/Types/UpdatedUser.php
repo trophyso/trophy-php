@@ -4,6 +4,7 @@ namespace Trophy\Types;
 
 use Trophy\Core\Json\JsonSerializableType;
 use Trophy\Core\Json\JsonProperty;
+use Trophy\Core\Types\ArrayType;
 
 /**
  * An object with editable user fields.
@@ -29,6 +30,12 @@ class UpdatedUser extends JsonSerializableType
     public ?string $tz;
 
     /**
+     * @var ?array<string> $deviceTokens The user's device tokens, used for push notifications.
+     */
+    #[JsonProperty('deviceTokens'), ArrayType(['string'])]
+    public ?array $deviceTokens;
+
+    /**
      * @var ?bool $subscribeToEmails Whether the user should receive Trophy-powered emails. Cannot be false if an email is provided.
      */
     #[JsonProperty('subscribeToEmails')]
@@ -39,6 +46,7 @@ class UpdatedUser extends JsonSerializableType
      *   email?: ?string,
      *   name?: ?string,
      *   tz?: ?string,
+     *   deviceTokens?: ?array<string>,
      *   subscribeToEmails?: ?bool,
      * } $values
      */
@@ -48,6 +56,7 @@ class UpdatedUser extends JsonSerializableType
         $this->email = $values['email'] ?? null;
         $this->name = $values['name'] ?? null;
         $this->tz = $values['tz'] ?? null;
+        $this->deviceTokens = $values['deviceTokens'] ?? null;
         $this->subscribeToEmails = $values['subscribeToEmails'] ?? null;
     }
 
