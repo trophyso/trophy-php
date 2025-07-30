@@ -36,7 +36,7 @@ class UpdatedUser extends JsonSerializableType
     public ?array $deviceTokens;
 
     /**
-     * @var ?bool $subscribeToEmails Whether the user should receive Trophy-powered emails. Cannot be false if an email is provided.
+     * @var ?bool $subscribeToEmails Whether the user should receive Trophy-powered emails. If false, Trophy will not store the user's email address.
      */
     #[JsonProperty('subscribeToEmails')]
     public ?bool $subscribeToEmails;
