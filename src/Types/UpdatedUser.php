@@ -42,12 +42,19 @@ class UpdatedUser extends JsonSerializableType
     public ?bool $subscribeToEmails;
 
     /**
+     * @var ?array<string, string> $attributes User attributes as key-value pairs. Keys must match existing user attributes set up in the Trophy dashboard.
+     */
+    #[JsonProperty('attributes'), ArrayType(['string' => 'string'])]
+    public ?array $attributes;
+
+    /**
      * @param array{
      *   email?: ?string,
      *   name?: ?string,
      *   tz?: ?string,
      *   deviceTokens?: ?array<string>,
      *   subscribeToEmails?: ?bool,
+     *   attributes?: ?array<string, string>,
      * } $values
      */
     public function __construct(
@@ -58,6 +65,7 @@ class UpdatedUser extends JsonSerializableType
         $this->tz = $values['tz'] ?? null;
         $this->deviceTokens = $values['deviceTokens'] ?? null;
         $this->subscribeToEmails = $values['subscribeToEmails'] ?? null;
+        $this->attributes = $values['attributes'] ?? null;
     }
 
     /**

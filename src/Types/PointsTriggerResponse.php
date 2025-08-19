@@ -4,6 +4,7 @@ namespace Trophy\Types;
 
 use Trophy\Core\Json\JsonSerializableType;
 use Trophy\Core\Json\JsonProperty;
+use Trophy\Core\Types\ArrayType;
 use DateTime;
 use Trophy\Core\Types\Date;
 
@@ -70,6 +71,18 @@ class PointsTriggerResponse extends JsonSerializableType
     public ?string $achievementName;
 
     /**
+     * @var ?array<PointsTriggerResponseUserAttributesItem> $userAttributes User attribute filters that must be met for this trigger to activate. Only present if the trigger has user attribute filters configured.
+     */
+    #[JsonProperty('userAttributes'), ArrayType([PointsTriggerResponseUserAttributesItem::class])]
+    public ?array $userAttributes;
+
+    /**
+     * @var ?PointsTriggerResponseEventAttribute $eventAttribute Event attribute filter that must be met for this trigger to activate. Only present if the trigger has an event filter configured.
+     */
+    #[JsonProperty('eventAttribute')]
+    public ?PointsTriggerResponseEventAttribute $eventAttribute;
+
+    /**
      * @var ?DateTime $created The date and time the trigger was created, in ISO 8601 format.
      */
     #[JsonProperty('created'), Date(Date::TYPE_DATETIME)]
@@ -93,6 +106,8 @@ class PointsTriggerResponse extends JsonSerializableType
      *   streakLengthThreshold?: ?float,
      *   metricName?: ?string,
      *   achievementName?: ?string,
+     *   userAttributes?: ?array<PointsTriggerResponseUserAttributesItem>,
+     *   eventAttribute?: ?PointsTriggerResponseEventAttribute,
      *   created?: ?DateTime,
      *   updated?: ?DateTime,
      * } $values
@@ -110,6 +125,8 @@ class PointsTriggerResponse extends JsonSerializableType
         $this->streakLengthThreshold = $values['streakLengthThreshold'] ?? null;
         $this->metricName = $values['metricName'] ?? null;
         $this->achievementName = $values['achievementName'] ?? null;
+        $this->userAttributes = $values['userAttributes'] ?? null;
+        $this->eventAttribute = $values['eventAttribute'] ?? null;
         $this->created = $values['created'] ?? null;
         $this->updated = $values['updated'] ?? null;
     }

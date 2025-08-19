@@ -5,6 +5,7 @@ namespace Trophy\Types;
 use Trophy\Core\Json\JsonSerializableType;
 use Trophy\Traits\AchievementResponse;
 use Trophy\Core\Json\JsonProperty;
+use Trophy\Core\Types\ArrayType;
 
 class AchievementWithStatsResponse extends JsonSerializableType
 {
@@ -17,15 +18,29 @@ class AchievementWithStatsResponse extends JsonSerializableType
     public ?int $completions;
 
     /**
-     * @var ?float $completedPercentage The percentage of all users who have completed this achievement.
+     * @var ?float $rarity The percentage of all users who have completed this achievement.
      */
-    #[JsonProperty('completedPercentage')]
-    public ?float $completedPercentage;
+    #[JsonProperty('rarity')]
+    public ?float $rarity;
+
+    /**
+     * @var ?array<AchievementWithStatsResponseUserAttributesItem> $userAttributes User attribute filters that must be met for this achievement to be completed. Only present if the achievement has user attribute filters configured.
+     */
+    #[JsonProperty('userAttributes'), ArrayType([AchievementWithStatsResponseUserAttributesItem::class])]
+    public ?array $userAttributes;
+
+    /**
+     * @var ?AchievementWithStatsResponseEventAttribute $eventAttribute Event attribute filter that must be met for this achievement to be completed. Only present if the achievement has an event filter configured.
+     */
+    #[JsonProperty('eventAttribute')]
+    public ?AchievementWithStatsResponseEventAttribute $eventAttribute;
 
     /**
      * @param array{
      *   completions?: ?int,
-     *   completedPercentage?: ?float,
+     *   rarity?: ?float,
+     *   userAttributes?: ?array<AchievementWithStatsResponseUserAttributesItem>,
+     *   eventAttribute?: ?AchievementWithStatsResponseEventAttribute,
      *   id: string,
      *   name: string,
      *   trigger: value-of<AchievementResponseTrigger>,
@@ -43,7 +58,9 @@ class AchievementWithStatsResponse extends JsonSerializableType
         array $values,
     ) {
         $this->completions = $values['completions'] ?? null;
-        $this->completedPercentage = $values['completedPercentage'] ?? null;
+        $this->rarity = $values['rarity'] ?? null;
+        $this->userAttributes = $values['userAttributes'] ?? null;
+        $this->eventAttribute = $values['eventAttribute'] ?? null;
         $this->id = $values['id'];
         $this->name = $values['name'];
         $this->trigger = $values['trigger'];

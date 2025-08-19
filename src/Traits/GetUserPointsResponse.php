@@ -9,14 +9,38 @@ use Trophy\Core\Types\ArrayType;
 trait GetUserPointsResponse
 {
     /**
-     * @var ?float $total The user's total points
+     * @var string $id The ID of the points system
      */
-    #[JsonProperty('total')]
-    public ?float $total;
+    #[JsonProperty('id')]
+    public string $id;
 
     /**
-     * @var ?array<PointsAward> $awards Array of trigger awards that added points.
+     * @var string $name The name of the points system
+     */
+    #[JsonProperty('name')]
+    public string $name;
+
+    /**
+     * @var ?string $description The description of the points system
+     */
+    #[JsonProperty('description')]
+    public ?string $description;
+
+    /**
+     * @var ?string $badgeUrl The URL of the badge image for the points system
+     */
+    #[JsonProperty('badgeUrl')]
+    public ?string $badgeUrl;
+
+    /**
+     * @var float $total The user's total points
+     */
+    #[JsonProperty('total')]
+    public float $total;
+
+    /**
+     * @var array<PointsAward> $awards Array of trigger awards that added points.
      */
     #[JsonProperty('awards'), ArrayType([PointsAward::class])]
-    public ?array $awards;
+    public array $awards;
 }

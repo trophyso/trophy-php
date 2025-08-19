@@ -4,6 +4,7 @@ namespace Trophy\Points;
 
 use GuzzleHttp\ClientInterface;
 use Trophy\Core\Client\RawClient;
+use Trophy\Points\Requests\PointsSummaryRequest;
 use Trophy\Types\PointsRange;
 use Trophy\Exceptions\TrophyException;
 use Trophy\Exceptions\TrophyApiException;
@@ -14,7 +15,7 @@ use Trophy\Core\Json\JsonDecoder;
 use JsonException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\ClientExceptionInterface;
-use Trophy\Types\PointsTriggerResponse;
+use Trophy\Types\PointsSystemResponse;
 
 class PointsClient
 {
@@ -53,6 +54,8 @@ class PointsClient
     /**
      * Get a breakdown of the number of users with points in each range.
      *
+     * @param string $key Key of the points system.
+     * @param PointsSummaryRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -61,15 +64,20 @@ class PointsClient
      * @throws TrophyException
      * @throws TrophyApiException
      */
-    public function summary(?array $options = null): array
+    public function summary(string $key, PointsSummaryRequest $request, ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->userAttributes != null) {
+            $query['userAttributes'] = $request->userAttributes;
+        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "points/summary",
+                    path: "points/$key/summary",
                     method: HttpMethod::GET,
+                    query: $query,
                 ),
                 $options,
             );
@@ -101,24 +109,25 @@ class PointsClient
     }
 
     /**
-     * Get all points triggers.
+     * Get a points system with all its triggers.
      *
+     * @param string $key Key of the points system.
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
      * } $options
-     * @return array<PointsTriggerResponse>
+     * @return PointsSystemResponse
      * @throws TrophyException
      * @throws TrophyApiException
      */
-    public function triggers(?array $options = null): array
+    public function system(string $key, ?array $options = null): PointsSystemResponse
     {
         $options = array_merge($this->options, $options ?? []);
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "points/triggers",
+                    path: "points/$key",
                     method: HttpMethod::GET,
                 ),
                 $options,
@@ -126,7 +135,7 @@ class PointsClient
             $statusCode = $response->getStatusCode();
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
-                return JsonDecoder::decodeArray($json, [PointsTriggerResponse::class]); // @phpstan-ignore-line
+                return PointsSystemResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

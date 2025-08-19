@@ -19,16 +19,24 @@ class MetricEventPointsResponse extends JsonSerializableType
     /**
      * @param array{
      *   added?: ?float,
-     *   total?: ?float,
-     *   awards?: ?array<PointsAward>,
+     *   id: string,
+     *   name: string,
+     *   description?: ?string,
+     *   badgeUrl?: ?string,
+     *   total: float,
+     *   awards: array<PointsAward>,
      * } $values
      */
     public function __construct(
-        array $values = [],
+        array $values,
     ) {
         $this->added = $values['added'] ?? null;
-        $this->total = $values['total'] ?? null;
-        $this->awards = $values['awards'] ?? null;
+        $this->id = $values['id'];
+        $this->name = $values['name'];
+        $this->description = $values['description'] ?? null;
+        $this->badgeUrl = $values['badgeUrl'] ?? null;
+        $this->total = $values['total'];
+        $this->awards = $values['awards'];
     }
 
     /**

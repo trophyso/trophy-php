@@ -39,10 +39,10 @@ class EventResponse extends JsonSerializableType
     public ?MetricEventStreakResponse $currentStreak;
 
     /**
-     * @var ?MetricEventPointsResponse $points The points added by this event, and a breakdown of the points awards that added points.
+     * @var ?array<string, MetricEventPointsResponse> $points A map of points systems by key that were affected by this event.
      */
-    #[JsonProperty('points')]
-    public ?MetricEventPointsResponse $points;
+    #[JsonProperty('points'), ArrayType(['string' => MetricEventPointsResponse::class])]
+    public ?array $points;
 
     /**
      * @param array{
@@ -51,7 +51,7 @@ class EventResponse extends JsonSerializableType
      *   total: float,
      *   achievements?: ?array<CompletedAchievementResponse>,
      *   currentStreak?: ?MetricEventStreakResponse,
-     *   points?: ?MetricEventPointsResponse,
+     *   points?: ?array<string, MetricEventPointsResponse>,
      * } $values
      */
     public function __construct(

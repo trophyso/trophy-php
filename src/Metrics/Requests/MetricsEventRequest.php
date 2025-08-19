@@ -5,6 +5,7 @@ namespace Trophy\Metrics\Requests;
 use Trophy\Core\Json\JsonSerializableType;
 use Trophy\Types\UpsertedUser;
 use Trophy\Core\Json\JsonProperty;
+use Trophy\Core\Types\ArrayType;
 
 class MetricsEventRequest extends JsonSerializableType
 {
@@ -21,9 +22,16 @@ class MetricsEventRequest extends JsonSerializableType
     public float $value;
 
     /**
+     * @var ?array<string, string> $attributes Event attributes as key-value pairs. Keys must match existing event attributes set up in the Trophy dashboard.
+     */
+    #[JsonProperty('attributes'), ArrayType(['string' => 'string'])]
+    public ?array $attributes;
+
+    /**
      * @param array{
      *   user: UpsertedUser,
      *   value: float,
+     *   attributes?: ?array<string, string>,
      * } $values
      */
     public function __construct(
@@ -31,5 +39,6 @@ class MetricsEventRequest extends JsonSerializableType
     ) {
         $this->user = $values['user'];
         $this->value = $values['value'];
+        $this->attributes = $values['attributes'] ?? null;
     }
 }

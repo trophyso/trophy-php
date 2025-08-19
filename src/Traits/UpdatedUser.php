@@ -39,4 +39,10 @@ trait UpdatedUser
      */
     #[JsonProperty('subscribeToEmails')]
     public ?bool $subscribeToEmails;
+
+    /**
+     * @var ?array<string, string> $attributes User attributes as key-value pairs. Keys must match existing user attributes set up in the Trophy dashboard.
+     */
+    #[JsonProperty('attributes'), ArrayType(['string' => 'string'])]
+    public ?array $attributes;
 }

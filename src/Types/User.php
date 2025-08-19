@@ -44,6 +44,7 @@ class User extends JsonSerializableType
      *   tz?: ?string,
      *   deviceTokens?: ?array<string>,
      *   subscribeToEmails?: ?bool,
+     *   attributes?: ?array<string, string>,
      * } $values
      */
     public function __construct(
@@ -58,6 +59,7 @@ class User extends JsonSerializableType
         $this->tz = $values['tz'] ?? null;
         $this->deviceTokens = $values['deviceTokens'] ?? null;
         $this->subscribeToEmails = $values['subscribeToEmails'] ?? null;
+        $this->attributes = $values['attributes'] ?? null;
     }
 
     /**

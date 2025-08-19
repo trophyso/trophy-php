@@ -6,43 +6,37 @@ use Trophy\Core\Json\JsonSerializableType;
 use Trophy\Core\Json\JsonProperty;
 use Trophy\Core\Types\ArrayType;
 
-class GetUserPointsResponse extends JsonSerializableType
+class PointsSystemResponse extends JsonSerializableType
 {
     /**
-     * @var string $id The ID of the points system
+     * @var string $id The unique ID of the points system.
      */
     #[JsonProperty('id')]
     public string $id;
 
     /**
-     * @var string $name The name of the points system
+     * @var string $name The name of the points system.
      */
     #[JsonProperty('name')]
     public string $name;
 
     /**
-     * @var ?string $description The description of the points system
+     * @var ?string $description The description of the points system.
      */
     #[JsonProperty('description')]
     public ?string $description;
 
     /**
-     * @var ?string $badgeUrl The URL of the badge image for the points system
+     * @var ?string $badgeUrl The URL of the badge image for the points system, if one has been uploaded.
      */
     #[JsonProperty('badgeUrl')]
     public ?string $badgeUrl;
 
     /**
-     * @var float $total The user's total points
+     * @var array<PointsTriggerResponse> $triggers Array of active triggers for this points system.
      */
-    #[JsonProperty('total')]
-    public float $total;
-
-    /**
-     * @var array<PointsAward> $awards Array of trigger awards that added points.
-     */
-    #[JsonProperty('awards'), ArrayType([PointsAward::class])]
-    public array $awards;
+    #[JsonProperty('triggers'), ArrayType([PointsTriggerResponse::class])]
+    public array $triggers;
 
     /**
      * @param array{
@@ -50,8 +44,7 @@ class GetUserPointsResponse extends JsonSerializableType
      *   name: string,
      *   description?: ?string,
      *   badgeUrl?: ?string,
-     *   total: float,
-     *   awards: array<PointsAward>,
+     *   triggers: array<PointsTriggerResponse>,
      * } $values
      */
     public function __construct(
@@ -61,8 +54,7 @@ class GetUserPointsResponse extends JsonSerializableType
         $this->name = $values['name'];
         $this->description = $values['description'] ?? null;
         $this->badgeUrl = $values['badgeUrl'] ?? null;
-        $this->total = $values['total'];
-        $this->awards = $values['awards'];
+        $this->triggers = $values['triggers'];
     }
 
     /**

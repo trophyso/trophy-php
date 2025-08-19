@@ -4,6 +4,7 @@ namespace Trophy\Types;
 
 use Trophy\Core\Json\JsonSerializableType;
 use Trophy\Core\Json\JsonProperty;
+use Trophy\Core\Types\ArrayType;
 
 class AchievementCompletionResponse extends JsonSerializableType
 {
@@ -20,9 +21,16 @@ class AchievementCompletionResponse extends JsonSerializableType
     public CompletedAchievementResponse $achievement;
 
     /**
+     * @var ?array<string, MetricEventPointsResponse> $points A map of points systems by key that were affected by this achievement completion.
+     */
+    #[JsonProperty('points'), ArrayType(['string' => MetricEventPointsResponse::class])]
+    public ?array $points;
+
+    /**
      * @param array{
      *   completionId: string,
      *   achievement: CompletedAchievementResponse,
+     *   points?: ?array<string, MetricEventPointsResponse>,
      * } $values
      */
     public function __construct(
@@ -30,6 +38,7 @@ class AchievementCompletionResponse extends JsonSerializableType
     ) {
         $this->completionId = $values['completionId'];
         $this->achievement = $values['achievement'];
+        $this->points = $values['points'] ?? null;
     }
 
     /**

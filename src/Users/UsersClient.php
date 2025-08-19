@@ -19,6 +19,7 @@ use Trophy\Types\MetricResponse;
 use Trophy\Core\Json\JsonDecoder;
 use Trophy\Users\Requests\UsersMetricEventSummaryRequest;
 use Trophy\Users\Types\UsersMetricEventSummaryResponseItem;
+use Trophy\Users\Requests\UsersAchievementsRequest;
 use Trophy\Types\CompletedAchievementResponse;
 use Trophy\Users\Requests\UsersStreakRequest;
 use Trophy\Types\StreakResponse;
@@ -432,9 +433,10 @@ class UsersClient
     }
 
     /**
-     * Get all of a user's completed achievements.
+     * Get a user's achievements.
      *
      * @param string $id ID of the user.
+     * @param UsersAchievementsRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -443,15 +445,20 @@ class UsersClient
      * @throws TrophyException
      * @throws TrophyApiException
      */
-    public function allAchievements(string $id, ?array $options = null): array
+    public function achievements(string $id, UsersAchievementsRequest $request, ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->includeIncomplete != null) {
+            $query['includeIncomplete'] = $request->includeIncomplete;
+        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
                     path: "users/$id/achievements",
                     method: HttpMethod::GET,
+                    query: $query,
                 ),
                 $options,
             );
@@ -540,9 +547,10 @@ class UsersClient
     }
 
     /**
-     * Get a user's points.
+     * Get a user's points for a specific points system.
      *
      * @param string $id ID of the user.
+     * @param string $key Key of the points system.
      * @param UsersPointsRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -552,7 +560,7 @@ class UsersClient
      * @throws TrophyException
      * @throws TrophyApiException
      */
-    public function points(string $id, UsersPointsRequest $request, ?array $options = null): GetUserPointsResponse
+    public function points(string $id, string $key, UsersPointsRequest $request, ?array $options = null): GetUserPointsResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -563,7 +571,7 @@ class UsersClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "users/$id/points",
+                    path: "users/$id/points/$key",
                     method: HttpMethod::GET,
                     query: $query,
                 ),
@@ -597,9 +605,10 @@ class UsersClient
     }
 
     /**
-     * Get a summary of points awards over time for a user.
+     * Get a summary of points awards over time for a user for a specific points system.
      *
      * @param string $id ID of the user.
+     * @param string $key Key of the points system.
      * @param UsersPointsEventSummaryRequest $request
      * @param ?array{
      *   baseUrl?: string,
@@ -609,7 +618,7 @@ class UsersClient
      * @throws TrophyException
      * @throws TrophyApiException
      */
-    public function pointsEventSummary(string $id, UsersPointsEventSummaryRequest $request, ?array $options = null): array
+    public function pointsEventSummary(string $id, string $key, UsersPointsEventSummaryRequest $request, ?array $options = null): array
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
@@ -620,7 +629,7 @@ class UsersClient
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "users/$id/points/event-summary",
+                    path: "users/$id/points/$key/event-summary",
                     method: HttpMethod::GET,
                     query: $query,
                 ),
