@@ -5,6 +5,7 @@ namespace Trophy;
 use Trophy\Achievements\AchievementsClient;
 use Trophy\Metrics\MetricsClient;
 use Trophy\Users\UsersClient;
+use Trophy\Streaks\StreaksClient;
 use Trophy\Points\PointsClient;
 use GuzzleHttp\ClientInterface;
 use Trophy\Core\Client\RawClient;
@@ -25,6 +26,11 @@ class TrophyClient
      * @var UsersClient $users
      */
     public UsersClient $users;
+
+    /**
+     * @var StreaksClient $streaks
+     */
+    public StreaksClient $streaks;
 
     /**
      * @var PointsClient $points
@@ -78,6 +84,7 @@ class TrophyClient
         $this->achievements = new AchievementsClient($this->client, $this->options);
         $this->metrics = new MetricsClient($this->client, $this->options);
         $this->users = new UsersClient($this->client, $this->options);
+        $this->streaks = new StreaksClient($this->client, $this->options);
         $this->points = new PointsClient($this->client, $this->options);
     }
 }
