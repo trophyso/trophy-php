@@ -21,8 +21,15 @@ class StreakResponse extends JsonSerializableType
     public ?array $streakHistory;
 
     /**
+     * @var ?int $rank The user's rank across all users. Null if the user has no active streak.
+     */
+    #[JsonProperty('rank')]
+    public ?int $rank;
+
+    /**
      * @param array{
      *   streakHistory?: ?array<StreakResponseStreakHistoryItem>,
+     *   rank?: ?int,
      *   length: int,
      *   frequency: value-of<StreakFrequency>,
      *   started?: ?string,
@@ -35,6 +42,7 @@ class StreakResponse extends JsonSerializableType
         array $values,
     ) {
         $this->streakHistory = $values['streakHistory'] ?? null;
+        $this->rank = $values['rank'] ?? null;
         $this->length = $values['length'];
         $this->frequency = $values['frequency'];
         $this->started = $values['started'] ?? null;
