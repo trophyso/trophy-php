@@ -45,6 +45,18 @@ class EventResponse extends JsonSerializableType
     public ?array $points;
 
     /**
+     * @var ?string $idempotencyKey The idempotency key used for the event, if one was provided.
+     */
+    #[JsonProperty('idempotencyKey')]
+    public ?string $idempotencyKey;
+
+    /**
+     * @var ?bool $idempotentReplayed Whether the event was replayed due to idempotency.
+     */
+    #[JsonProperty('idempotentReplayed')]
+    public ?bool $idempotentReplayed;
+
+    /**
      * @param array{
      *   eventId: string,
      *   metricId: string,
@@ -52,6 +64,8 @@ class EventResponse extends JsonSerializableType
      *   achievements?: ?array<CompletedAchievementResponse>,
      *   currentStreak?: ?MetricEventStreakResponse,
      *   points?: ?array<string, MetricEventPointsResponse>,
+     *   idempotencyKey?: ?string,
+     *   idempotentReplayed?: ?bool,
      * } $values
      */
     public function __construct(
@@ -63,6 +77,8 @@ class EventResponse extends JsonSerializableType
         $this->achievements = $values['achievements'] ?? null;
         $this->currentStreak = $values['currentStreak'] ?? null;
         $this->points = $values['points'] ?? null;
+        $this->idempotencyKey = $values['idempotencyKey'] ?? null;
+        $this->idempotentReplayed = $values['idempotentReplayed'] ?? null;
     }
 
     /**
