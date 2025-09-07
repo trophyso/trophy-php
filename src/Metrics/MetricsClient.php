@@ -65,12 +65,17 @@ class MetricsClient
     public function event(string $key, MetricsEventRequest $request, ?array $options = null): EventResponse
     {
         $options = array_merge($this->options, $options ?? []);
+        $headers = [];
+        if ($request->idempotencyKey != null) {
+            $headers['Idempotency-Key'] = $request->idempotencyKey;
+        }
         try {
             $response = $this->client->sendRequest(
                 new JsonApiRequest(
                     baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
                     path: "metrics/$key/event",
                     method: HttpMethod::POST,
+                    headers: $headers,
                     body: $request,
                 ),
                 $options,
