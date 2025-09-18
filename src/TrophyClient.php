@@ -7,6 +7,7 @@ use Trophy\Metrics\MetricsClient;
 use Trophy\Users\UsersClient;
 use Trophy\Streaks\StreaksClient;
 use Trophy\Points\PointsClient;
+use Trophy\Leaderboards\LeaderboardsClient;
 use GuzzleHttp\ClientInterface;
 use Trophy\Core\Client\RawClient;
 
@@ -36,6 +37,11 @@ class TrophyClient
      * @var PointsClient $points
      */
     public PointsClient $points;
+
+    /**
+     * @var LeaderboardsClient $leaderboards
+     */
+    public LeaderboardsClient $leaderboards;
 
     /**
      * @var array{
@@ -86,5 +92,6 @@ class TrophyClient
         $this->users = new UsersClient($this->client, $this->options);
         $this->streaks = new StreaksClient($this->client, $this->options);
         $this->points = new PointsClient($this->client, $this->options);
+        $this->leaderboards = new LeaderboardsClient($this->client, $this->options);
     }
 }

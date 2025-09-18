@@ -33,16 +33,22 @@ class EventResponse extends JsonSerializableType
     public ?array $achievements;
 
     /**
-     * @var ?MetricEventStreakResponse $currentStreak The user's current streak for the metric, if the metric has streaks enabled.
+     * @var ?MetricEventStreakResponse $currentStreak The user's current streak.
      */
     #[JsonProperty('currentStreak')]
     public ?MetricEventStreakResponse $currentStreak;
 
     /**
-     * @var ?array<string, MetricEventPointsResponse> $points A map of points systems by key that were affected by this event.
+     * @var ?array<string, MetricEventPointsResponse> $points A map of points systems by key.
      */
     #[JsonProperty('points'), ArrayType(['string' => MetricEventPointsResponse::class])]
     public ?array $points;
+
+    /**
+     * @var ?array<string, MetricEventLeaderboardResponse> $leaderboards A map of leaderboards by key.
+     */
+    #[JsonProperty('leaderboards'), ArrayType(['string' => MetricEventLeaderboardResponse::class])]
+    public ?array $leaderboards;
 
     /**
      * @var ?string $idempotencyKey The idempotency key used for the event, if one was provided.
@@ -64,6 +70,7 @@ class EventResponse extends JsonSerializableType
      *   achievements?: ?array<CompletedAchievementResponse>,
      *   currentStreak?: ?MetricEventStreakResponse,
      *   points?: ?array<string, MetricEventPointsResponse>,
+     *   leaderboards?: ?array<string, MetricEventLeaderboardResponse>,
      *   idempotencyKey?: ?string,
      *   idempotentReplayed?: ?bool,
      * } $values
@@ -77,6 +84,7 @@ class EventResponse extends JsonSerializableType
         $this->achievements = $values['achievements'] ?? null;
         $this->currentStreak = $values['currentStreak'] ?? null;
         $this->points = $values['points'] ?? null;
+        $this->leaderboards = $values['leaderboards'] ?? null;
         $this->idempotencyKey = $values['idempotencyKey'] ?? null;
         $this->idempotentReplayed = $values['idempotentReplayed'] ?? null;
     }
