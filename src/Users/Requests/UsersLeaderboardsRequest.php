@@ -1,6 +1,6 @@
 <?php
 
-namespace Trophy\Leaderboards\Requests;
+namespace Trophy\Users\Requests;
 
 use Trophy\Core\Json\JsonSerializableType;
 

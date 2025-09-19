@@ -27,6 +27,8 @@ use Trophy\Users\Requests\UsersPointsRequest;
 use Trophy\Types\GetUserPointsResponse;
 use Trophy\Users\Requests\UsersPointsEventSummaryRequest;
 use Trophy\Users\Types\UsersPointsEventSummaryResponseItem;
+use Trophy\Users\Requests\UsersLeaderboardsRequest;
+use Trophy\Types\UserLeaderboardResponse;
 
 class UsersClient
 {
@@ -639,6 +641,64 @@ class UsersClient
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
                 return JsonDecoder::decodeArray($json, [UsersPointsEventSummaryResponseItem::class]); // @phpstan-ignore-line
+            }
+        } catch (JsonException $e) {
+            throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                throw new TrophyException(message: $e->getMessage(), previous: $e);
+            }
+            throw new TrophyApiException(
+                message: "API request failed",
+                statusCode: $response->getStatusCode(),
+                body: $response->getBody()->getContents(),
+            );
+        } catch (ClientExceptionInterface $e) {
+            throw new TrophyException(message: $e->getMessage(), previous: $e);
+        }
+        throw new TrophyApiException(
+            message: 'API request failed',
+            statusCode: $statusCode,
+            body: $response->getBody()->getContents(),
+        );
+    }
+
+    /**
+     * Get a user's rank, value, and history for a specific leaderboard.
+     *
+     * @param string $id The user's ID in your database.
+     * @param string $key Unique key of the leaderboard as set when created.
+     * @param UsersLeaderboardsRequest $request
+     * @param ?array{
+     *   baseUrl?: string,
+     *   maxRetries?: int,
+     * } $options
+     * @return UserLeaderboardResponse
+     * @throws TrophyException
+     * @throws TrophyApiException
+     */
+    public function leaderboards(string $id, string $key, UsersLeaderboardsRequest $request, ?array $options = null): UserLeaderboardResponse
+    {
+        $options = array_merge($this->options, $options ?? []);
+        $query = [];
+        if ($request->run != null) {
+            $query['run'] = $request->run;
+        }
+        try {
+            $response = $this->client->sendRequest(
+                new JsonApiRequest(
+                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
+                    path: "users/$id/leaderboards/$key",
+                    method: HttpMethod::GET,
+                    query: $query,
+                ),
+                $options,
+            );
+            $statusCode = $response->getStatusCode();
+            if ($statusCode >= 200 && $statusCode < 400) {
+                $json = $response->getBody()->getContents();
+                return UserLeaderboardResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);

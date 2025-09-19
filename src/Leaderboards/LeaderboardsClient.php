@@ -16,8 +16,6 @@ use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Trophy\Leaderboards\Requests\LeaderboardsGetRequest;
 use Trophy\Types\LeaderboardResponseWithRankings;
-use Trophy\Leaderboards\Requests\UsersLeaderboardsRequest;
-use Trophy\Types\UserLeaderboardResponse;
 
 class LeaderboardsClient
 {
@@ -146,64 +144,6 @@ class LeaderboardsClient
             if ($statusCode >= 200 && $statusCode < 400) {
                 $json = $response->getBody()->getContents();
                 return LeaderboardResponseWithRankings::fromJson($json);
-            }
-        } catch (JsonException $e) {
-            throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-            if ($response === null) {
-                throw new TrophyException(message: $e->getMessage(), previous: $e);
-            }
-            throw new TrophyApiException(
-                message: "API request failed",
-                statusCode: $response->getStatusCode(),
-                body: $response->getBody()->getContents(),
-            );
-        } catch (ClientExceptionInterface $e) {
-            throw new TrophyException(message: $e->getMessage(), previous: $e);
-        }
-        throw new TrophyApiException(
-            message: 'API request failed',
-            statusCode: $statusCode,
-            body: $response->getBody()->getContents(),
-        );
-    }
-
-    /**
-     * Get a user's rank, value, and history for a specific leaderboard.
-     *
-     * @param string $userId The user's ID in your database.
-     * @param string $key Unique key of the leaderboard as set when created.
-     * @param UsersLeaderboardsRequest $request
-     * @param ?array{
-     *   baseUrl?: string,
-     *   maxRetries?: int,
-     * } $options
-     * @return UserLeaderboardResponse
-     * @throws TrophyException
-     * @throws TrophyApiException
-     */
-    public function usersLeaderboards(string $userId, string $key, UsersLeaderboardsRequest $request, ?array $options = null): UserLeaderboardResponse
-    {
-        $options = array_merge($this->options, $options ?? []);
-        $query = [];
-        if ($request->run != null) {
-            $query['run'] = $request->run;
-        }
-        try {
-            $response = $this->client->sendRequest(
-                new JsonApiRequest(
-                    baseUrl: $options['baseUrl'] ?? $this->client->options['baseUrl'] ?? Environments::Default_->value,
-                    path: "users/$userId/leaderboards/$key",
-                    method: HttpMethod::GET,
-                    query: $query,
-                ),
-                $options,
-            );
-            $statusCode = $response->getStatusCode();
-            if ($statusCode >= 200 && $statusCode < 400) {
-                $json = $response->getBody()->getContents();
-                return UserLeaderboardResponse::fromJson($json);
             }
         } catch (JsonException $e) {
             throw new TrophyException(message: "Failed to deserialize response: {$e->getMessage()}", previous: $e);
