@@ -27,7 +27,7 @@ use Trophy\Users\Requests\UsersPointsRequest;
 use Trophy\Types\GetUserPointsResponse;
 use Trophy\Users\Requests\UsersPointsEventSummaryRequest;
 use Trophy\Users\Types\UsersPointsEventSummaryResponseItem;
-use Trophy\Users\Requests\UsersLeaderboardsRequest;
+use Trophy\Users\Requests\UsersLeaderboardRequest;
 use Trophy\Types\UserLeaderboardResponse;
 
 class UsersClient
@@ -669,7 +669,7 @@ class UsersClient
      *
      * @param string $id The user's ID in your database.
      * @param string $key Unique key of the leaderboard as set when created.
-     * @param UsersLeaderboardsRequest $request
+     * @param UsersLeaderboardRequest $request
      * @param ?array{
      *   baseUrl?: string,
      *   maxRetries?: int,
@@ -678,7 +678,7 @@ class UsersClient
      * @throws TrophyException
      * @throws TrophyApiException
      */
-    public function leaderboards(string $id, string $key, UsersLeaderboardsRequest $request, ?array $options = null): UserLeaderboardResponse
+    public function leaderboard(string $id, string $key, UsersLeaderboardRequest $request, ?array $options = null): UserLeaderboardResponse
     {
         $options = array_merge($this->options, $options ?? []);
         $query = [];
