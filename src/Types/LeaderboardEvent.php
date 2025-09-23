@@ -13,10 +13,10 @@ use Trophy\Core\Types\Date;
 class LeaderboardEvent extends JsonSerializableType
 {
     /**
-     * @var DateTime $time The timestamp when the event occurred.
+     * @var ?DateTime $timestamp The timestamp when the event occurred.
      */
-    #[JsonProperty('time'), Date(Date::TYPE_DATETIME)]
-    public DateTime $time;
+    #[JsonProperty('timestamp'), Date(Date::TYPE_DATETIME)]
+    public ?DateTime $timestamp;
 
     /**
      * @var ?int $previousRank The user's rank before this event, or null if they were not on the leaderboard.
@@ -44,7 +44,7 @@ class LeaderboardEvent extends JsonSerializableType
 
     /**
      * @param array{
-     *   time: DateTime,
+     *   timestamp?: ?DateTime,
      *   previousRank?: ?int,
      *   rank?: ?int,
      *   previousValue?: ?int,
@@ -52,9 +52,9 @@ class LeaderboardEvent extends JsonSerializableType
      * } $values
      */
     public function __construct(
-        array $values,
+        array $values = [],
     ) {
-        $this->time = $values['time'];
+        $this->timestamp = $values['timestamp'] ?? null;
         $this->previousRank = $values['previousRank'] ?? null;
         $this->rank = $values['rank'] ?? null;
         $this->previousValue = $values['previousValue'] ?? null;
