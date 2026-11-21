@@ -2,8 +2,10 @@
 
 The Trophy PHP SDK provides convenient access to the Trophy API from applications written in PHP.
 
-Trophy provides APIs and tools for adding gamification to your application, keeping users engaged
-through rewards, achievements, streaks, and personalized communication.
+Trophy is the 1:1 customer engagement platform for consumer web and mobile apps. AI lifecycle
+marketing agents write and send personalized email and push to every user, alongside in-app
+experiences like milestones, streaks, points, and leaderboards. This library gives your app access
+to the Trophy API, so you can send the user events that power both.
 
 ## Installation
 
